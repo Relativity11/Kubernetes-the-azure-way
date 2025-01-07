@@ -1,0 +1,17 @@
+#cloud-config
+package_update: true
+package_upgrade: true
+packages:
+  - wget
+  - curl
+  - vim
+  - openssl
+  - git
+
+runcmd:
+  - git clone --depth 1 https://github.com/kelseyhightower/kubernetes-the-hard-way.git /root/kubernetes-the-hard-way
+  - cd /root/kubernetes-the-hard-way
+  - sed -i 's/arm64/amd64/g' downloads.txt
+  - wget -q --show-progress --https-only --timestamping -P downloads -i downloads.txt
+  - chmod +x downloads/kubectl
+  - cp downloads/kubectl /usr/local/bin/
