@@ -15,3 +15,10 @@ runcmd:
   - wget -q --show-progress --https-only --timestamping -P downloads -i downloads.txt
   - chmod +x downloads/kubectl
   - cp downloads/kubectl /usr/local/bin/
+  - |
+    echo "${server_public_ip} server.kubernetes.local server" > /root/kubernetes-the-hard-way/machines.txt
+    echo "${worker_public_ips[0]} worker-1.kubernetes.local worker-1" >> /root/kubernetes-the-hard-way/machines.txt
+    echo "${worker_public_ips[1]} worker-2.kubernetes.local worker-2" >> /root/kubernetes-the-hard-way/machines.txt
+  - sed -i 's/^#PermitRootLogin.*/PermitRootLogin yes/' /etc/ssh/sshd_config
+  - systemctl restart sshd
+  - ssh-keygen -t rsa -b 2048 -f /root/.ssh/id_rsa -q -N ""

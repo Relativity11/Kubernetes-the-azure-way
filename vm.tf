@@ -43,7 +43,10 @@ resource "azurerm_linux_virtual_machine" "jumpbox" {
 
   disable_password_authentication = false
 
-  custom_data = filebase64("${path.module}/cloud-init/jumpbox.yaml")
+  custom_data = base64encode(templatefile("${path.module}/cloud-init/jumpbox.yaml", {
+    server_public_ip  = azurerm_public_ip.server_public_ip.ip_address
+    worker_public_ips = azurerm_public_ip.worker_public_ips[*].ip_address
+  }))
 
   lifecycle {
     prevent_destroy = false
